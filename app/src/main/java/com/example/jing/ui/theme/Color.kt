@@ -2,12 +2,12 @@ package com.example.jing.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Blue10 = Color(0xFF000F5E)
-val Blue20 = Color(0xFF001E92)
-val Blue30 = Color(0xFF002ECC)
-val Blue40 = Color(0xFF1546F6)
-val Blue80 = Color(0xFFB8C3FF)
-val Blue90 = Color(0xFFDDE1FF)
+val Pink10 = Color(0xFFFCE4EC)
+val Pink20 = Color(0xFFF8BBD0)
+val Pink30 = Color(0xFFF48FB1)
+val Pink40 = Color(0xFFEC407A)
+val Pink80 = Color(0xFFAD1457)
+val Pink90 = Color(0xFF880E4F)
 
 val DarkBlue10 = Color(0xFF00036B)
 val DarkBlue20 = Color(0xFF000BA6)

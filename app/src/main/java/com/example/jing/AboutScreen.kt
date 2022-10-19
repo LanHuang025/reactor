@@ -5,6 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.indication
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,6 +29,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.Center
+import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Alignment.Companion.End
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
@@ -102,22 +105,30 @@ fun AboutScreen(navController: NavController) {
             )
             Text(text = "v0.1-alpha01")
             Column(Modifier.weight(1f)) {
-                Spacer(modifier = Modifier.weight(0.4f))
+                Spacer(modifier = Modifier.weight(0.2f))
+                Text(modifier = Modifier.padding(16.dp),text = "技术支持:",
+                fontSize = 20.sp,
+                    color = if (isSystemInDarkTheme()) Color.White else Color.Black
+                    )
                 Surface(
                     modifier = Modifier
                         .height(300.dp)
                         .padding(16.dp)
                         .clickable { }
                         .fillMaxWidth()
-                        .weight(0.3f)
+                        .weight(0.4f)
                         .clip(RoundedCornerShape(20.dp))
                 ) {
-                    Row(modifier = Modifier.fillMaxWidth()) {
+                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = CenterVertically
+                        ) {
                         Row(modifier = Modifier.fillMaxWidth()) {
                             Image(
                                 painter = painterResource(id = R.drawable.androidstudio),
                                 contentDescription = null,
-                                modifier = Modifier.clip(CircleShape)
+                                modifier = Modifier
+                                    .clip(CircleShape)
+                                    .padding(4.dp)
                             )
                             Text(text = "AndroidStudio", fontSize = 20.sp, modifier = Modifier.padding(16.dp))
                             Spacer(modifier = Modifier.weight(1f))
@@ -133,15 +144,20 @@ fun AboutScreen(navController: NavController) {
                             .padding(16.dp)
                             .clickable { }
                             .fillMaxWidth()
-                            .weight(0.3f)
+                            .weight(0.4f)
                             .clip(RoundedCornerShape(20.dp))
                     ) {
-                        Row(modifier = Modifier.fillMaxWidth()) {
+                        Row(modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = CenterVertically
+                            ) {
                             Row(modifier = Modifier.fillMaxWidth()) {
                                 Image(
                                     painter = painterResource(id = R.drawable.compose),
                                     contentDescription = null,
-                                    modifier = Modifier.clip(CircleShape)
+                                    modifier = Modifier
+                                        .clip(CircleShape)
+                                        .padding(4.dp)
                                 )
                                 Text(text = "Jetpack Compose", fontSize = 20.sp, modifier = Modifier.padding(16.dp))
                                 Spacer(modifier = Modifier.weight(1f))
