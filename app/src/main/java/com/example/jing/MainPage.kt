@@ -44,8 +44,11 @@ fun MainPage(context: Context) {
         composable("AboutScreen"){
             AboutScreen(navController)
         }
-        composable("WebScreen"){
-            WebScreen(navController = navController)
+        composable("WebScreen/{url}"
+            ){
+            it.arguments?.getString("url")
+                ?.let { it1 -> WebScreen(navController = navController, it1)
+                }
         }
     }
     var firstPressedTime = 0L

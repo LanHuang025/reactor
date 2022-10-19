@@ -114,7 +114,9 @@ fun AboutScreen(navController: NavController) {
                     modifier = Modifier
                         .height(300.dp)
                         .padding(16.dp)
-                        .clickable { }
+                        .clickable {
+                                navController.navigate("WebScreen/as")
+                        }
                         .fillMaxWidth()
                         .weight(0.4f)
                         .clip(RoundedCornerShape(20.dp))
@@ -132,7 +134,9 @@ fun AboutScreen(navController: NavController) {
                             )
                             Text(text = "AndroidStudio", fontSize = 20.sp, modifier = Modifier.padding(16.dp))
                             Spacer(modifier = Modifier.weight(1f))
-                            MyIconButton(onClick = {  }) {
+                            MyIconButton(onClick = {
+                                navController.navigate("WebScreen/compose")
+                            }) {
                                 Icon(painter = painterResource(id = R.drawable.twotone_launch_24), contentDescription =null )
                             }
                         }
@@ -142,7 +146,9 @@ fun AboutScreen(navController: NavController) {
                         modifier = Modifier
                             .height(300.dp)
                             .padding(16.dp)
-                            .clickable { }
+                            .clickable {
+                                navController.navigate("WebScreen/compose")
+                            }
                             .fillMaxWidth()
                             .weight(0.4f)
                             .clip(RoundedCornerShape(20.dp))
@@ -161,7 +167,9 @@ fun AboutScreen(navController: NavController) {
                                 )
                                 Text(text = "Jetpack Compose", fontSize = 20.sp, modifier = Modifier.padding(16.dp))
                                 Spacer(modifier = Modifier.weight(1f))
-                                MyIconButton(onClick = {  }) {
+                                MyIconButton(onClick = {
+                                    navController.navigate("WebScreen/compose")
+                                }) {
                                     Icon(painter = painterResource(id = R.drawable.twotone_launch_24), contentDescription =null )
                                 }
                             }

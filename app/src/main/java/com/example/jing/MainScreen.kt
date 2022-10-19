@@ -133,7 +133,7 @@ fun MainScreen(navController: NavController, context:Context) {
                     label = { Text(text = "软件反馈") },
                     selected = 1 == selectItem.value,
                     onClick = {
-                        navController.navigate("WebScreen")
+                        navController.navigate("WebScreen/help")
                         scope.launch {
                             drawerState.close()
                         }
