@@ -166,8 +166,7 @@ fun MainScreen(navController: NavController, context:Context) {
                     )
                 },
                     Modifier
-                        .fillMaxWidth()
-                        .background(color = Color.White),
+                        .fillMaxWidth(),
                     navigationIcon = {
                         IconButton(onClick = {
                             scope.launch {
