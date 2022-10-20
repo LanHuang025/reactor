@@ -24,6 +24,7 @@ import androidx.compose.material.icons.twotone.Help
 import androidx.compose.material.icons.twotone.Home
 import androidx.compose.material.icons.twotone.Info
 import androidx.compose.material.icons.twotone.Menu
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Divider
@@ -38,6 +39,7 @@ import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -133,7 +135,13 @@ fun MainScreen(navController: NavController, context:Context) {
                     label = { Text(text = "软件反馈") },
                     selected = 1 == selectItem.value,
                     onClick = {
-                        navController.navigate("WebScreen/help")
+                        navController.navigate("WebScreen/help"){
+                            this.popUpTo("MainScreen"){
+                                saveState=true
+                            }
+                            launchSingleTop=true
+                            restoreState=true
+                        }
                         scope.launch {
                             drawerState.close()
                         }
@@ -186,10 +194,29 @@ fun MainScreen(navController: NavController, context:Context) {
                     .fillMaxSize()
                     .padding(paddingValues = it)
             ) {
-                OutlinedButton(onClick = { /*TODO*/ }) {
+                val toggle= remember {
+                    mutableStateOf(false)
+                }
+                if (toggle.value){
+                    AlertDialog(onDismissRequest = { toggle.value=false},
+                    title = { Text(text = "当前route")},
+                        text = {
+                            navController.currentDestination?.let { it1 -> it1.route?.let { it2 -> Text(text = it2) } }
+                        },
+                        confirmButton = {
+                            TextButton(onClick = { toggle.value=false }) {
+                                Text(text = "确定")
+                            }
+                        }
+                    )
+                }
+                OutlinedButton(onClick = {
+                    //toggle.value=true
+                    navController.navigate("WebScreen/insole")
+                }) {
                     Icon(imageVector = Icons.TwoTone.Favorite, contentDescription = null)
                     Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
-                    Text(text = "按钮")
+                    Text(text = "扫雷")
                 }
             }
         }

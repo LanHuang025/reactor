@@ -8,6 +8,7 @@ import androidx.compose.foundation.indication
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,6 +19,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.twotone.ArrowBack
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -113,13 +115,13 @@ fun AboutScreen(navController: NavController) {
                 Surface(
                     modifier = Modifier
                         .height(300.dp)
-                        .padding(16.dp)
+                        .padding(paddingValues = PaddingValues(16.dp, 16.dp, 16.dp, 0.dp))
                         .clickable {
-                                navController.navigate("WebScreen/as")
+                            navController.navigate("WebScreen/as")
                         }
                         .fillMaxWidth()
                         .weight(0.4f)
-                        .clip(RoundedCornerShape(20.dp))
+                        .clip(RoundedCornerShape(50.dp))
                 ) {
                     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center,
                     verticalAlignment = CenterVertically
@@ -142,16 +144,20 @@ fun AboutScreen(navController: NavController) {
                         }
                     }
                 }
+                Divider(
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f),
+                    modifier = Modifier.padding(16.dp)
+                )
                     Surface(
                         modifier = Modifier
                             .height(300.dp)
-                            .padding(16.dp)
+                            .padding(paddingValues = PaddingValues(16.dp, 0.dp, 16.dp, 16.dp))
                             .clickable {
                                 navController.navigate("WebScreen/compose")
                             }
                             .fillMaxWidth()
                             .weight(0.4f)
-                            .clip(RoundedCornerShape(20.dp))
+                            .clip(RoundedCornerShape(50.dp))
                     ) {
                         Row(modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.Center,

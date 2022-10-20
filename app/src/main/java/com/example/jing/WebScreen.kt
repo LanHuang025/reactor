@@ -1,6 +1,11 @@
 package com.example.jing
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.webkit.ValueCallback
+import android.webkit.WebView
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,19 +31,26 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.navigation.NavController
 import com.example.jing.ui.theme.Pink40
+import com.google.accompanist.web.AccompanistWebChromeClient
 import com.google.accompanist.web.LoadingState
 import com.google.accompanist.web.WebView
+import com.google.accompanist.web.WebViewNavigator
+import com.google.accompanist.web.WebViewState
 import com.google.accompanist.web.rememberWebViewState
 
-@SuppressLint("SetJavaScriptEnabled")
+@SuppressLint("SetJavaScriptEnabled", "SuspiciousIndentation")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun WebScreen(navController: NavController,flag:String){
+fun WebScreen(navController: NavController
+              ,flag:String
+              ,context:Context,
+              webViewNavigator: WebViewNavigator
+){
     val url by remember {
         mutableStateOf(
             if (flag=="as") "https://developer.android.google.cn/studio" else
-                if (flag=="compose") "https://developer.android.google.cn/jetpack/compose" else
-                    "https://support.qq.com/product/441318"
+                if (flag=="compose") "https://developer.android.google.cn/jetpack/compose" else if (flag=="help")
+                    "https://support.qq.com/product/441318" else if (flag=="insole") "https://m.saolei123.com/" else ""
         )
     }
     val state = rememberWebViewState(url = url)
@@ -52,7 +64,7 @@ fun WebScreen(navController: NavController,flag:String){
                 Text(text = if (url=="https://support.qq.com/product/441318") "反馈中心"
                 else if (url=="https://developer.android.google.cn/studio") "AndroidStudio"
                 else if (url=="https://developer.android.google.cn/jetpack/compose") "Jetpack Compose"
-                else url, overflow = TextOverflow.Ellipsis
+                else if (url=="https://m.saolei123.com/") "扫雷" else url, overflow = TextOverflow.Ellipsis
                 )
             },
                 navigationIcon = {
@@ -80,11 +92,30 @@ fun WebScreen(navController: NavController,flag:String){
                         trackColor = Pink40
                     )
                 }
+                val webClient = remember {
+                    object : AccompanistWebChromeClient() {
+                        override fun onShowFileChooser(
+                            webView: WebView?,
+                            filePathCallback: ValueCallback<Array<Uri>>?,
+                            fileChooserParams: FileChooserParams?
+                        ): Boolean {
+                            val i=Intent(Intent.ACTION_GET_CONTENT)
+                            i.addCategory(Intent.CATEGORY_OPENABLE)
+                            i.type="image/*"
+                            val chooseIntent=Intent.createChooser(i,"请选择你的图片")
+                            context.startActivity(chooseIntent)
+                            return true
+                        }
+                    }
+                }
                 WebView(
                     state = state,
                     onCreated = { it.settings.javaScriptEnabled = true
+                        it.settings.domStorageEnabled=true
                     },
                     modifier = Modifier.weight(1f)
+                , chromeClient = webClient,
+                    navigator = webViewNavigator
                 )
             }
             if (loadingState is LoadingState.Loading)
