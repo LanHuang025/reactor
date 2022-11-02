@@ -107,20 +107,19 @@ fun AboutScreen(navController: NavController) {
             )
             Text(text = "v0.1-alpha01")
             Column(Modifier.weight(1f)) {
-                Spacer(modifier = Modifier.weight(0.2f))
+                Spacer(modifier = Modifier.weight(0.4f))
                 Text(modifier = Modifier.padding(16.dp),text = "技术支持:",
                 fontSize = 20.sp,
                     color = if (isSystemInDarkTheme()) Color.White else Color.Black
                     )
                 Surface(
                     modifier = Modifier
-                        .height(300.dp)
                         .padding(paddingValues = PaddingValues(16.dp, 16.dp, 16.dp, 0.dp))
                         .clickable {
                             navController.navigate("WebScreen/as")
                         }
                         .fillMaxWidth()
-                        .weight(0.4f)
+                        .weight(0.3f)
                         .clip(RoundedCornerShape(50.dp))
                 ) {
                     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center,
@@ -137,7 +136,7 @@ fun AboutScreen(navController: NavController) {
                             Text(text = "AndroidStudio", fontSize = 20.sp, modifier = Modifier.padding(16.dp))
                             Spacer(modifier = Modifier.weight(1f))
                             MyIconButton(onClick = {
-                                navController.navigate("WebScreen/compose")
+                                navController.navigate("WebScreen/as")
                             }) {
                                 Icon(painter = painterResource(id = R.drawable.twotone_launch_24), contentDescription =null )
                             }
@@ -150,13 +149,12 @@ fun AboutScreen(navController: NavController) {
                 )
                     Surface(
                         modifier = Modifier
-                            .height(300.dp)
                             .padding(paddingValues = PaddingValues(16.dp, 0.dp, 16.dp, 16.dp))
                             .clickable {
                                 navController.navigate("WebScreen/compose")
                             }
                             .fillMaxWidth()
-                            .weight(0.4f)
+                            .weight(0.3f)
                             .clip(RoundedCornerShape(50.dp))
                     ) {
                         Row(modifier = Modifier.fillMaxWidth(),

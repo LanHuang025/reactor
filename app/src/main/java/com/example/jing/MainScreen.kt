@@ -53,6 +53,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.google.accompanist.flowlayout.FlowColumn
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.launch
 
@@ -210,14 +211,25 @@ fun MainScreen(navController: NavController, context:Context) {
                         }
                     )
                 }
-                OutlinedButton(onClick = {
-                    //toggle.value=true
-                    navController.navigate("WebScreen/insole")
-                }) {
-                    Icon(imageVector = Icons.TwoTone.Favorite, contentDescription = null)
-                    Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
-                    Text(text = "扫雷")
+                FlowColumn(Modifier.fillMaxSize()) {
+                    OutlinedButton(onClick = {
+                        //toggle.value=true
+                        navController.navigate("WebScreen/insole")
+                    }) {
+                        Icon(imageVector = Icons.TwoTone.Favorite, contentDescription = null)
+                        Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
+                        Text(text = "扫雷")
+                    }
+                    OutlinedButton(onClick = {
+                        //toggle.value=true
+                        navController.navigate("WebScreen/class")
+                    }) {
+                        Icon(imageVector = Icons.TwoTone.Help, contentDescription = null)
+                        Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
+                        Text(text = "第二课堂")
+                    }
                 }
+
             }
         }
     }

@@ -23,6 +23,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -44,27 +45,29 @@ import com.google.accompanist.web.rememberWebViewState
 fun WebScreen(navController: NavController
               ,flag:String
               ,context:Context,
-              webViewNavigator: WebViewNavigator
+              webViewNavigator: WebViewNavigator,
+              rememberUri:MutableState<String>,
 ){
     val url by remember {
         mutableStateOf(
             if (flag=="as") "https://developer.android.google.cn/studio" else
                 if (flag=="compose") "https://developer.android.google.cn/jetpack/compose" else if (flag=="help")
-                    "https://support.qq.com/product/441318" else if (flag=="insole") "https://m.saolei123.com/" else ""
+                    "https://support.qq.com/product/441318" else if (flag=="insole") "https://m.saolei123.com/" else if(flag=="class")
+                        "http://dekt.jxutcm.edu.cn/scParticipantController.do?main#idtop" else ""
         )
     }
     val state = rememberWebViewState(url = url)
+    rememberUri.value=state.content.getCurrentUrl()!!
     val loadingState = state.loadingState
-    BackHandler(true) {
-        navController.navigateUp()
-    }
     Scaffold(
         topBar = {
             TopAppBar(title = {
                 Text(text = if (url=="https://support.qq.com/product/441318") "反馈中心"
                 else if (url=="https://developer.android.google.cn/studio") "AndroidStudio"
                 else if (url=="https://developer.android.google.cn/jetpack/compose") "Jetpack Compose"
-                else if (url=="https://m.saolei123.com/") "扫雷" else url, overflow = TextOverflow.Ellipsis
+                else if (url=="https://m.saolei123.com/") "扫雷"
+                else if (url=="http://dekt.jxutcm.edu.cn/scParticipantController.do?main#idtop") "第二课堂"
+                    else url, overflow = TextOverflow.Ellipsis
                 )
             },
                 navigationIcon = {
@@ -104,7 +107,7 @@ fun WebScreen(navController: NavController
                             i.type="image/*"
                             val chooseIntent=Intent.createChooser(i,"请选择你的图片")
                             context.startActivity(chooseIntent)
-                            return true
+                            return false
                         }
                     }
                 }

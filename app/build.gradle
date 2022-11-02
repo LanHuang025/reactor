@@ -62,15 +62,19 @@ android {
 }
 
 dependencies {
+    implementation 'com.github.javakam:file.core:3.6.0@aar'      //核心库必选(Core library required)
+    implementation 'com.github.javakam:file.selector:3.6.0@aar'  //文件选择器(File selector)
+    implementation 'com.github.javakam:file.compressor:3.6.0@aar'//图片压缩, 修改自Luban(Image compression, based on Luban)
     implementation 'androidx.compose.material:material-icons-extended:1.3.0-rc01'
     implementation 'com.google.android.material:material:1.8.0-alpha01'
     implementation 'com.airbnb.android:lottie-compose:5.2.0'
     def nav_version = "2.6.0-alpha02"
-    implementation "androidx.navigation:navigation-compose:$nav_version"
-    implementation 'com.google.accompanist:accompanist-systemuicontroller:0.26.5-rc'
-    implementation "com.google.accompanist:accompanist-navigation-material:0.26.5-rc"
-    implementation "com.google.accompanist:accompanist-webview:0.26.5-rc"
-    implementation "com.google.accompanist:accompanist-permissions:0.26.5-rc"
+    implementation 'androidx.navigation:navigation-compose:2.5.2'
+    implementation 'com.google.accompanist:accompanist-systemuicontroller:0.27.0'
+    implementation 'com.google.accompanist:accompanist-navigation-material:0.27.0'
+    implementation 'com.google.accompanist:accompanist-webview:0.27.0'
+    implementation 'com.google.accompanist:accompanist-permissions:0.27.0'
+    implementation 'com.google.accompanist:accompanist-flowlayout:0.27.0'
     implementation 'androidx.core:core-ktx:1.9.0'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.0-alpha02'
     implementation 'androidx.activity:activity-compose:1.7.0-alpha01'
