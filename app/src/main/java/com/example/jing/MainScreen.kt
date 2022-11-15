@@ -4,27 +4,25 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.twotone.Call
+import androidx.compose.material.icons.twotone.Code
 import androidx.compose.material.icons.twotone.Favorite
 import androidx.compose.material.icons.twotone.Help
 import androidx.compose.material.icons.twotone.Home
 import androidx.compose.material.icons.twotone.Info
 import androidx.compose.material.icons.twotone.Menu
-import androidx.compose.material3.AlertDialog
+import androidx.compose.material.icons.twotone.Transform
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Divider
@@ -39,48 +37,25 @@ import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.google.accompanist.flowlayout.FlowColumn
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.google.accompanist.flowlayout.FlowRow
+import com.google.accompanist.flowlayout.MainAxisAlignment
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(navController: NavController, context:Context) {
-    val systemUiController = rememberSystemUiController()
-    val usedarkIcon = !isSystemInDarkTheme()
-    val backFlag= remember {
-        mutableStateOf(true)
-    }
-    LaunchedEffect(systemUiController, usedarkIcon) {
-        systemUiController.setSystemBarsColor(
-            Color.Transparent,
-            darkIcons = usedarkIcon
-        )
-        with(systemUiController) {
-            setStatusBarColor(
-                Color.Transparent,
-                darkIcons = usedarkIcon
-            )
-            setNavigationBarColor(
-                Color.Transparent,
-                darkIcons = usedarkIcon
-            )
-        }
-    }
+    Translatebar()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     val selectItem = remember {
@@ -88,9 +63,8 @@ fun MainScreen(navController: NavController, context:Context) {
     }
     ModalNavigationDrawer(
         modifier = Modifier
-            .fillMaxSize()
-            .systemBarsPadding(), drawerContent = {
-            ModalDrawerSheet {
+            .fillMaxSize(), drawerContent = {
+            ModalDrawerSheet(windowInsets = WindowInsets(0,0,0,0)) {
                 Image(
                     painter = painterResource(id = R.drawable.background),
                     contentDescription = null,
@@ -174,8 +148,7 @@ fun MainScreen(navController: NavController, context:Context) {
                         "反应堆"
                     )
                 },
-                    Modifier
-                        .fillMaxWidth(),
+                    Modifier.fillMaxWidth(),
                     navigationIcon = {
                         IconButton(onClick = {
                             scope.launch {
@@ -188,49 +161,83 @@ fun MainScreen(navController: NavController, context:Context) {
                 )
             }
         ) {
-            Column(
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues = it)
-            ) {
-                val toggle= remember {
-                    mutableStateOf(false)
-                }
-                if (toggle.value){
-                    AlertDialog(onDismissRequest = { toggle.value=false},
-                    title = { Text(text = "当前route")},
-                        text = {
-                            navController.currentDestination?.let { it1 -> it1.route?.let { it2 -> Text(text = it2) } }
-                        },
-                        confirmButton = {
-                            TextButton(onClick = { toggle.value=false }) {
-                                Text(text = "确定")
-                            }
+                FlowColumn(
+                    Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues = it),
+                    ) {
+                    FlowRow(
+                        mainAxisAlignment = MainAxisAlignment.SpaceBetween,mainAxisSpacing = 8.dp,
+                    ) {
+                        OutlinedButton(onClick = {
+                            //toggle.value=true
+                            navController.navigate("WebScreen/insole")
                         }
-                    )
+                        ) {
+                            Icon(imageVector = Icons.TwoTone.Favorite, contentDescription = null)
+                            Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
+                            Text(text = "扫雷")
+                        }
+                        OutlinedButton(onClick = {
+                            //toggle.value=true
+                            navController.navigate("WebScreen/class")
+                        }
+                        ) {
+                            Icon(imageVector = Icons.TwoTone.Help, contentDescription = null)
+                            Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
+                            Text(text = "第二课堂")
+                        }
+                        OutlinedButton(onClick = {
+                            navController.navigate("WebScreen/epidemic")
+                        }
+                        ) {
+                            Icon(imageVector = Icons.TwoTone.Help, contentDescription = null)
+                            Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
+                            Text(text = "疫情填报")
+                        }
                 }
-                FlowColumn(Modifier.fillMaxSize()) {
-                    OutlinedButton(onClick = {
-                        //toggle.value=true
-                        navController.navigate("WebScreen/insole")
-                    }) {
-                        Icon(imageVector = Icons.TwoTone.Favorite, contentDescription = null)
-                        Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
-                        Text(text = "扫雷")
+                    FlowRow(
+                        mainAxisAlignment = MainAxisAlignment.SpaceBetween,mainAxisSpacing = 8.dp,
+                    ) {
+                        OutlinedButton(onClick = {
+                            navController.navigate("BinaryScreen")
+                        }
+                        ) {
+                            Icon(imageVector = Icons.TwoTone.Transform, contentDescription = null)
+                            Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
+                            Text(text = "进制转换")
+                        }
+                        OutlinedButton(onClick = {
+                            navController.navigate("WebScreen/icpc")
+                        }
+                        ) {
+                            Icon(imageVector = Icons.TwoTone.Code, contentDescription = null)
+                            Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
+                            Text(text = "ICPC榜单")
+                        }
                     }
-                    OutlinedButton(onClick = {
-                        //toggle.value=true
-                        navController.navigate("WebScreen/class")
-                    }) {
-                        Icon(imageVector = Icons.TwoTone.Help, contentDescription = null)
-                        Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
-                        Text(text = "第二课堂")
-                    }
-                }
+                    FlowRow(mainAxisAlignment = MainAxisAlignment.SpaceBetween,mainAxisSpacing = 8.dp,
+                    modifier = Modifier.fillMaxWidth()
+                        ) {
+                        OutlinedButton(onClick = {
+                            navController.navigate("CodeScreen")
+                        }
+                        ) {
+                            Image(painter = painterResource(id = R.drawable.c), contentDescription = null,Modifier.size(50.dp))
+                            Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
+                            Text(text = "c语言编辑器")
+                        }
+                        OutlinedButton(onClick = {
 
-            }
+                        }
+                        ) {
+                            Image(painter = painterResource(id = R.drawable.python), contentDescription = null,Modifier.size(50.dp))
+                            Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
+                            Text(text = "python编辑器")
+                        }
+                    }
+
+                }
         }
     }
 }

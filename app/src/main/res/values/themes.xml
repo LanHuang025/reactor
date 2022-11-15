@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.MyTheme" parent="Theme.Material3.DynamicColors.DayNight">
+    <style name="Theme.MyTheme" parent="Theme.Material3.Light">
         <item name="colorPrimary">@color/pink_200</item>
         <item name="colorPrimaryDark">@color/pink_500</item>
         <item name="colorAccent">@color/pink_700</item>

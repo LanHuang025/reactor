@@ -4,9 +4,9 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.webkit.GeolocationPermissions
 import android.webkit.ValueCallback
 import android.webkit.WebView
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -36,7 +36,6 @@ import com.google.accompanist.web.AccompanistWebChromeClient
 import com.google.accompanist.web.LoadingState
 import com.google.accompanist.web.WebView
 import com.google.accompanist.web.WebViewNavigator
-import com.google.accompanist.web.WebViewState
 import com.google.accompanist.web.rememberWebViewState
 
 @SuppressLint("SetJavaScriptEnabled", "SuspiciousIndentation")
@@ -48,12 +47,20 @@ fun WebScreen(navController: NavController
               webViewNavigator: WebViewNavigator,
               rememberUri:MutableState<String>,
 ){
+    Translatebar()
     val url by remember {
         mutableStateOf(
             if (flag=="as") "https://developer.android.google.cn/studio" else
                 if (flag=="compose") "https://developer.android.google.cn/jetpack/compose" else if (flag=="help")
                     "https://support.qq.com/product/441318" else if (flag=="insole") "https://m.saolei123.com/" else if(flag=="class")
-                        "http://dekt.jxutcm.edu.cn/scParticipantController.do?main#idtop" else ""
+                        "http://dekt.jxutcm.edu.cn/scParticipantController.do?main#idtop"
+                else if(flag=="epidemic") "https://www.jiandaoyun.com" +
+                        "/app/5e37f1777d3dc900065d3aed" +
+                        "/entry/5e395fd66ceab20006a25e48#" +
+                        "/app/5e37f1777d3dc900065d3aed/form" +
+                        "/5e395fd66ceab20006a25e48"
+                else if(flag=="icpc") "https://board.xcpcio.com/"
+        else ""
         )
     }
     val state = rememberWebViewState(url = url)
@@ -67,6 +74,11 @@ fun WebScreen(navController: NavController
                 else if (url=="https://developer.android.google.cn/jetpack/compose") "Jetpack Compose"
                 else if (url=="https://m.saolei123.com/") "扫雷"
                 else if (url=="http://dekt.jxutcm.edu.cn/scParticipantController.do?main#idtop") "第二课堂"
+                    else if (url=="https://www.jiandaoyun.com" +
+                    "/app/5e37f1777d3dc900065d3aed/entry" +
+                    "/5e395fd66ceab20006a25e48#" +
+                    "/app/5e37f1777d3dc900065d3aed" +
+                    "/form/5e395fd66ceab20006a25e48") "疫情填报" else if (url=="https://board.xcpcio.com/") "ICPC榜单"
                     else url, overflow = TextOverflow.Ellipsis
                 )
             },
@@ -109,12 +121,35 @@ fun WebScreen(navController: NavController
                             context.startActivity(chooseIntent)
                             return false
                         }
+
+                        override fun onGeolocationPermissionsShowPrompt(
+                            origin: String?,
+                            callback: GeolocationPermissions.Callback?
+                        ) {
+                                callback!!.invoke(origin,true,false)
+                            super.onGeolocationPermissionsShowPrompt(origin, callback)
+                        }
                     }
                 }
                 WebView(
+                    captureBackPresses = true,
                     state = state,
-                    onCreated = { it.settings.javaScriptEnabled = true
-                        it.settings.domStorageEnabled=true
+                    onCreated = {
+                        it.apply {
+                            settings.apply {
+                                displayZoomControls=false
+                                javaScriptEnabled = true
+                                domStorageEnabled=true
+                                loadWithOverviewMode=true
+                                javaScriptCanOpenWindowsAutomatically=true
+                                setGeolocationEnabled(true)
+                                databaseEnabled=true
+                                builtInZoomControls=true
+                                setSupportZoom(true)
+                                useWideViewPort=true
+                            }
+                        }
+
                     },
                     modifier = Modifier.weight(1f)
                 , chromeClient = webClient,

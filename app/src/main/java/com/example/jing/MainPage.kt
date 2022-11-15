@@ -2,56 +2,69 @@ package com.example.jing
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.consumedWindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.google.accompanist.web.AccompanistWebChromeClient
 import com.google.accompanist.web.rememberWebViewNavigator
 
 
+@OptIn(ExperimentalPermissionsApi::class, ExperimentalMaterial3Api::class,
+    ExperimentalLayoutApi::class
+)
 @Composable
 fun MainPage(context: Context,
              ) {
-    val systemUiController = rememberSystemUiController()
+    val FinePermissionState = rememberPermissionState(
+        android.Manifest.permission.ACCESS_FINE_LOCATION
+    )
+    val CoarsePermissionState = rememberPermissionState(
+        android.Manifest.permission.ACCESS_COARSE_LOCATION
+    )
+    if (!FinePermissionState.status.isGranted||!CoarsePermissionState.status.isGranted) {
+        LaunchedEffect(Unit){
+            FinePermissionState.launchPermissionRequest()
+            CoarsePermissionState.launchPermissionRequest()
+        }
+    }
+    val StoragePermissionState = rememberPermissionState(
+        android.Manifest.permission.READ_EXTERNAL_STORAGE
+    )
+    if (!StoragePermissionState.status.isGranted) {
+        LaunchedEffect(Unit){
+            StoragePermissionState.launchPermissionRequest()
+        }
+    }
     val rememberUri = remember {
         mutableStateOf("")
     }
-    val usedarkIcon = !isSystemInDarkTheme()
-    val color = if (isSystemInDarkTheme()) Color.White else Color.Black
-    LaunchedEffect(systemUiController, usedarkIcon) {
-        systemUiController.setSystemBarsColor(
-            color,
-            darkIcons = usedarkIcon
-        )
-        with(systemUiController) {
-            setStatusBarColor(
-                color,
-                darkIcons = usedarkIcon
-            )
-            setNavigationBarColor(
-                color,
-                darkIcons = usedarkIcon
-            )
-        }
-    }
     val navController = rememberNavController()
-    val webNavugater= rememberWebViewNavigator()
+    val webNavigater= rememberWebViewNavigator()
     NavHost(
-        navController = navController, startDestination = "MainScreen"
+        navController = navController, startDestination = "MainScreen",
+        modifier = Modifier.consumedWindowInsets(paddingValues = PaddingValues(10.dp))
+            .fillMaxSize()
     ) {
         composable("MainScreen") {
             MainScreen(navController = navController, context)
@@ -59,13 +72,19 @@ fun MainPage(context: Context,
         composable("AboutScreen") {
             AboutScreen(navController)
         }
+        composable("CodeScreen") {
+            CodeScreen(navController)
+        }
+        composable("BinaryScreen") {
+            BinaryScreen(navController)
+        }
         composable(
             "WebScreen/{url}"
         ) {
             it.arguments?.getString("url")
                 ?.let { it1 ->
                     WebScreen(navController = navController, it1, context,
-                    webNavugater,
+                    webNavigater,
                         rememberUri
                         )
                 }
@@ -108,7 +127,7 @@ fun MainPage(context: Context,
                     if (rememberUri.value==""||rememberUri.value==""||rememberUri
                             .value==""
                     ){
-                        webNavugater.navigateBack()
+                        webNavigater.navigateBack()
                     }else{
                         navController.navigateUp()
                     }
@@ -116,6 +135,27 @@ fun MainPage(context: Context,
                     navController.navigateUp()
                 }
             }
+        }
+    }
+}
+@Composable
+public fun Translatebar(){
+    val systemUiController = rememberSystemUiController()
+    val usedarkIcon = !isSystemInDarkTheme()
+    LaunchedEffect(systemUiController, usedarkIcon) {
+        with(systemUiController) {
+            setSystemBarsColor(
+                Color.Transparent,
+                darkIcons = usedarkIcon
+            )
+            setStatusBarColor(
+                Color.Transparent,
+                darkIcons = usedarkIcon
+            )
+            setNavigationBarColor(
+                Color.Transparent,
+                darkIcons = usedarkIcon
+            )
         }
     }
 }
