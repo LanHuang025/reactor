@@ -34,8 +34,7 @@ import com.google.accompanist.web.rememberWebViewNavigator
     ExperimentalLayoutApi::class
 )
 @Composable
-fun MainPage(context: Context,
-             ) {
+fun MainPage(context: Context) {
     val FinePermissionState = rememberPermissionState(
         android.Manifest.permission.ACCESS_FINE_LOCATION
     )
@@ -73,7 +72,7 @@ fun MainPage(context: Context,
             AboutScreen(navController)
         }
         composable("CodeScreen") {
-            CodeScreen(navController)
+            CodeScreen(navController,context)
         }
         composable("BinaryScreen") {
             BinaryScreen(navController)

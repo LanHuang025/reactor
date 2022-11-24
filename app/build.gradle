@@ -4,7 +4,7 @@ plugins {
 }
 def buildTime() {
     def date = new Date()
-    def formattedDate = date.format('yyyyMMdd_HHmm')
+    def formattedDate = date.format('yyyyMMdd_HHmmss')
     return formattedDate
 }
 android {
