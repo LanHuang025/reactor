@@ -15,14 +15,21 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.twotone.AddChart
+import androidx.compose.material.icons.twotone.CalendarToday
 import androidx.compose.material.icons.twotone.Call
+import androidx.compose.material.icons.twotone.Co2
 import androidx.compose.material.icons.twotone.Code
+import androidx.compose.material.icons.twotone.CurrencyExchange
+import androidx.compose.material.icons.twotone.Dock
 import androidx.compose.material.icons.twotone.Favorite
 import androidx.compose.material.icons.twotone.Help
 import androidx.compose.material.icons.twotone.Home
 import androidx.compose.material.icons.twotone.Info
 import androidx.compose.material.icons.twotone.Menu
+import androidx.compose.material.icons.twotone.OilBarrel
 import androidx.compose.material.icons.twotone.Transform
+import androidx.compose.material.icons.twotone.Wifi
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Divider
@@ -191,7 +198,7 @@ fun MainScreen(navController: NavController, context:Context) {
                             navController.navigate("WebScreen/epidemic")
                         }
                         ) {
-                            Icon(imageVector = Icons.TwoTone.Help, contentDescription = null)
+                            Icon(imageVector = Icons.TwoTone.Dock, contentDescription = null)
                             Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
                             Text(text = "疫情填报")
                         }
@@ -214,6 +221,71 @@ fun MainScreen(navController: NavController, context:Context) {
                             Icon(imageVector = Icons.TwoTone.Code, contentDescription = null)
                             Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
                             Text(text = "ICPC榜单")
+                        }
+                        OutlinedButton(onClick = {
+                            navController.navigate("WebScreen/oiwiki")
+                        }
+                        ) {
+                            Icon(imageVector = Icons.TwoTone.OilBarrel, contentDescription = null)
+                            Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
+                            Text(text = "OI Wiki")
+                        }
+                    }
+                    FlowRow(
+                        mainAxisAlignment = MainAxisAlignment.SpaceBetween,mainAxisSpacing = 8.dp,
+                    ) {
+                        OutlinedButton(onClick = {
+                            navController.navigate("WebScreen/dev")
+                        }
+                        ) {
+                            Icon(imageVector = Icons.TwoTone.Co2, contentDescription = null)
+                            Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
+                            Text(text = "开发者搜索")
+                        }
+                        OutlinedButton(onClick = {
+                            navController.navigate("WebScreen/mdui")
+                        }
+                        ) {
+                            Icon(imageVector = Icons.TwoTone.AddChart, contentDescription = null)
+                            Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
+                            Text(text = "mdui文档")
+                        }
+                        OutlinedButton(onClick = {
+                            navController.navigate("WebScreen/ctfwiki")
+                        }
+                        ) {
+                            Icon(
+                                imageVector = Icons.TwoTone.CalendarToday,
+                                contentDescription = null
+                            )
+                            Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
+                            Text(text = "CTF Wiki")
+                        }
+                    }
+                    FlowRow(
+                        mainAxisAlignment = MainAxisAlignment.SpaceBetween,mainAxisSpacing = 8.dp,
+                    ) {
+                        OutlinedButton(onClick = {
+                            navController.navigate("WifiScreen")
+                        }
+                        ) {
+                            Icon(
+                                imageVector = Icons.TwoTone.Wifi,
+                                contentDescription = null
+                            )
+                            Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
+                            Text(text = "Wifi密码查看(需root)")
+                        }
+                        OutlinedButton(onClick = {
+                            navController.navigate("WebScreen/cf")
+                        }
+                        ) {
+                            Icon(
+                                imageVector = Icons.TwoTone.CurrencyExchange,
+                                contentDescription = null
+                            )
+                            Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
+                            Text(text = "Codeforces年度报告")
                         }
                     }
                     FlowRow(mainAxisAlignment = MainAxisAlignment.SpaceBetween,mainAxisSpacing = 8.dp,

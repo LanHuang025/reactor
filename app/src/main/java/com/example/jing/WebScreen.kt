@@ -48,18 +48,35 @@ fun WebScreen(navController: NavController
               rememberUri:MutableState<String>,
 ){
     Translatebar()
+    val AS="https://developer.android.google.cn/studio"
+    val compose="https://developer.android.google.cn/jetpack/compose"
+    val help="https://support.qq.com/product/441318"
+    val insole="https://m.saolei123.com/"
+    val CLASS="http://dekt.jxutcm.edu.cn/scParticipantController.do?main#idtop"
+    val epidemic="https://www.jiandaoyun.com" +
+            "/app/5e37f1777d3dc900065d3aed" +
+            "/entry/5e395fd66ceab20006a25e48#" +
+            "/app/5e37f1777d3dc900065d3aed/form" +
+            "/5e395fd66ceab20006a25e48"
+    val icpc="https://board.xcpcio.com/"
+    val cf="https://cromarmot.github.io/cfannual/#/"
+    val dev="https://kaifa.baidu.com/"
+    val mdui="https://www.mdui.org/"
+    val oiwiki="https://oi-wiki.org/"
+    val ctfwiki="https://ctf-wiki.org/"
     val url by remember {
         mutableStateOf(
-            if (flag=="as") "https://developer.android.google.cn/studio" else
-                if (flag=="compose") "https://developer.android.google.cn/jetpack/compose" else if (flag=="help")
-                    "https://support.qq.com/product/441318" else if (flag=="insole") "https://m.saolei123.com/" else if(flag=="class")
-                        "http://dekt.jxutcm.edu.cn/scParticipantController.do?main#idtop"
-                else if(flag=="epidemic") "https://www.jiandaoyun.com" +
-                        "/app/5e37f1777d3dc900065d3aed" +
-                        "/entry/5e395fd66ceab20006a25e48#" +
-                        "/app/5e37f1777d3dc900065d3aed/form" +
-                        "/5e395fd66ceab20006a25e48"
-                else if(flag=="icpc") "https://board.xcpcio.com/"
+            if (flag=="as") AS else
+                if (flag=="compose") compose else if (flag=="help") help
+                     else if (flag=="insole") insole else if(flag=="class")
+                        CLASS
+                else if(flag=="epidemic") epidemic
+                else if(flag=="icpc") icpc
+        else if (flag=="cf") cf
+        else if (flag=="dev") dev
+        else if (flag=="mdui") mdui
+        else if (flag=="oiwiki") oiwiki
+        else if (flag=="ctfwiki") ctfwiki
         else ""
         )
     }
@@ -69,16 +86,18 @@ fun WebScreen(navController: NavController
     Scaffold(
         topBar = {
             TopAppBar(title = {
-                Text(text = if (url=="https://support.qq.com/product/441318") "反馈中心"
-                else if (url=="https://developer.android.google.cn/studio") "AndroidStudio"
-                else if (url=="https://developer.android.google.cn/jetpack/compose") "Jetpack Compose"
-                else if (url=="https://m.saolei123.com/") "扫雷"
-                else if (url=="http://dekt.jxutcm.edu.cn/scParticipantController.do?main#idtop") "第二课堂"
-                    else if (url=="https://www.jiandaoyun.com" +
-                    "/app/5e37f1777d3dc900065d3aed/entry" +
-                    "/5e395fd66ceab20006a25e48#" +
-                    "/app/5e37f1777d3dc900065d3aed" +
-                    "/form/5e395fd66ceab20006a25e48") "疫情填报" else if (url=="https://board.xcpcio.com/") "ICPC榜单"
+                Text(text = if (url==help) "反馈中心"
+                else if (url==AS) "AndroidStudio"
+                else if (url==compose) "Jetpack Compose"
+                else if (url==insole) "扫雷"
+                else if (url==CLASS) "第二课堂"
+                    else if (url==epidemic) "疫情填报"
+                else if (url==icpc) "ICPC榜单"
+                    else if (url==cf) "Codeforces年度报告"
+                    else if (url==dev) "开发者搜索"
+                else if (url==mdui) "mdui文档"
+                else if (url==oiwiki) "OI Wiki"
+                else if (url==ctfwiki) "CTF Wiki"
                     else url, overflow = TextOverflow.Ellipsis
                 )
             },

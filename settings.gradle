@@ -13,6 +13,7 @@ dependencyResolutionManagement {
         mavenCentral()
         maven{ url "https://repo.eclipse.org/content/groups/releases/"}
         maven{ url "https://maven.aliyun.com/nexus/content/groups/public/"}
+        maven { url 'https://jitpack.io' }
     }
 }
 rootProject.name = "进制转换工具"

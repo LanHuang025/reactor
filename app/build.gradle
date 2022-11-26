@@ -62,6 +62,17 @@ android {
 }
 
 dependencies {
+    def libsuVersion = '5.0.2'
+    // The core module that provides APIs to a shell
+    implementation "com.github.topjohnwu.libsu:core:$libsuVersion"
+
+    // Optional: APIs for creating root services. Depends on ":core"
+    implementation "com.github.topjohnwu.libsu:service:$libsuVersion"
+    implementation "com.github.topjohnwu.libsu:nio:$libsuVersion"
+    implementation "com.github.topjohnwu.libsu:docs:$libsuVersion"
+    implementation "com.github.topjohnwu.libsu:io:$libsuVersion"
+    implementation 'com.google.accompanist:accompanist-swiperefresh:0.27.1'
+    implementation 'com.google.accompanist:accompanist-placeholder-material:0.27.1'
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
     implementation("org.eclipse.lemminx:org.eclipse.lemminx:0.17.0")
     implementation(platform("io.github.Rosemoe.sora-editor:bom:0.18.1"))

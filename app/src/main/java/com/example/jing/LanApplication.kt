@@ -1,9 +1,12 @@
 package com.example.jing
 
 import android.app.Application
+import android.content.Context
+import com.topjohnwu.superuser.ShellUtils
 
-class LanApplication :Application(){
-    override fun onCreate() {
-        super.onCreate()
+class MyApplication :Application(){
+    override fun attachBaseContext(base: Context?) {
+        super.attachBaseContext(base)
+        ShellUtils.fastCmd("su")
     }
 }

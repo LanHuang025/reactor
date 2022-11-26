@@ -1,5 +1,6 @@
 package com.example.jing
 
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.widget.Toast
@@ -23,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.application.ui.WifiScreen
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
@@ -34,7 +36,7 @@ import com.google.accompanist.web.rememberWebViewNavigator
     ExperimentalLayoutApi::class
 )
 @Composable
-fun MainPage(context: Context) {
+fun MainPage(context: Context,clipboardManager: ClipboardManager) {
     val FinePermissionState = rememberPermissionState(
         android.Manifest.permission.ACCESS_FINE_LOCATION
     )
@@ -62,7 +64,8 @@ fun MainPage(context: Context) {
     val webNavigater= rememberWebViewNavigator()
     NavHost(
         navController = navController, startDestination = "MainScreen",
-        modifier = Modifier.consumedWindowInsets(paddingValues = PaddingValues(10.dp))
+        modifier = Modifier
+            .consumedWindowInsets(paddingValues = PaddingValues(10.dp))
             .fillMaxSize()
     ) {
         composable("MainScreen") {
@@ -76,6 +79,9 @@ fun MainPage(context: Context) {
         }
         composable("BinaryScreen") {
             BinaryScreen(navController)
+        }
+        composable("WifiScreen"){
+            WifiScreen(navController = navController, clipboardManager = clipboardManager)
         }
         composable(
             "WebScreen/{url}"
