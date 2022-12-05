@@ -2,6 +2,7 @@ package com.example.jing
 
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -12,7 +13,9 @@ import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
 import com.example.jing.ui.theme.MyTheme
 import com.example.jing.utils.CrashHandler
+
 class MainActivity : ComponentActivity() {
+    var context=this
     override fun onCreate(savedInstanceState: Bundle?) {
         WindowCompat.setDecorFitsSystemWindows(window,false)
         super.onCreate(savedInstanceState)
@@ -27,5 +30,7 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        newConfig.let { super.onConfigurationChanged(it) }
+    }
 }

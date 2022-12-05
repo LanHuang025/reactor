@@ -10,8 +10,11 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.consumedWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.twotone.Error
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -30,6 +33,9 @@ import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.google.accompanist.web.rememberWebViewNavigator
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import kotlin.concurrent.thread
 
 
 @OptIn(ExperimentalPermissionsApi::class, ExperimentalMaterial3Api::class,
@@ -37,6 +43,37 @@ import com.google.accompanist.web.rememberWebViewNavigator
 )
 @Composable
 fun MainPage(context: Context,clipboardManager: ClipboardManager) {
+    val isArrowed= remember {
+        mutableStateOf("true")
+    }
+    val url="https://gitee.com/HuangLan2019/my-world/raw/master/README.md"
+    val client = OkHttpClient();
+    val request = Request.Builder()
+        .url(url)
+        .build();
+    thread {
+        isArrowed.value=client.newCall(request).execute().body.string()
+    }
+    if (isArrowed.value!="true"){
+        AlertDialog(onDismissRequest = { },
+        title = {
+            Text(text = "错误")
+        },
+            icon = {
+                Icon(imageVector = Icons.TwoTone.Error, contentDescription = null)
+            },
+            text = {
+                Text(text = "软件已被管理员禁用")
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    System.exit(0)
+                }) {
+                    Text(text = "退出")
+                }
+            }
+        )
+    }
     val FinePermissionState = rememberPermissionState(
         android.Manifest.permission.ACCESS_FINE_LOCATION
     )

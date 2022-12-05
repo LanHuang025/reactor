@@ -29,6 +29,7 @@ import androidx.compose.material.icons.twotone.Info
 import androidx.compose.material.icons.twotone.Menu
 import androidx.compose.material.icons.twotone.OilBarrel
 import androidx.compose.material.icons.twotone.Transform
+import androidx.compose.material.icons.twotone.WebStories
 import androidx.compose.material.icons.twotone.Wifi
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -57,6 +58,7 @@ import androidx.navigation.NavController
 import com.google.accompanist.flowlayout.FlowColumn
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.MainAxisAlignment
+import com.google.accompanist.flowlayout.SizeMode
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -172,9 +174,11 @@ fun MainScreen(navController: NavController, context:Context) {
                     Modifier
                         .fillMaxSize()
                         .padding(paddingValues = it),
+                    mainAxisSize = SizeMode.Expand
                     ) {
                     FlowRow(
                         mainAxisAlignment = MainAxisAlignment.SpaceBetween,mainAxisSpacing = 8.dp,
+                        mainAxisSize = SizeMode.Expand
                     ) {
                         OutlinedButton(onClick = {
                             //toggle.value=true
@@ -205,6 +209,7 @@ fun MainScreen(navController: NavController, context:Context) {
                 }
                     FlowRow(
                         mainAxisAlignment = MainAxisAlignment.SpaceBetween,mainAxisSpacing = 8.dp,
+                        mainAxisSize = SizeMode.Expand
                     ) {
                         OutlinedButton(onClick = {
                             navController.navigate("BinaryScreen")
@@ -233,6 +238,7 @@ fun MainScreen(navController: NavController, context:Context) {
                     }
                     FlowRow(
                         mainAxisAlignment = MainAxisAlignment.SpaceBetween,mainAxisSpacing = 8.dp,
+                        mainAxisSize = SizeMode.Expand
                     ) {
                         OutlinedButton(onClick = {
                             navController.navigate("WebScreen/dev")
@@ -264,6 +270,7 @@ fun MainScreen(navController: NavController, context:Context) {
                     }
                     FlowRow(
                         mainAxisAlignment = MainAxisAlignment.SpaceBetween,mainAxisSpacing = 8.dp,
+                        mainAxisSize = SizeMode.Expand
                     ) {
                         OutlinedButton(onClick = {
                             navController.navigate("WifiScreen")
@@ -289,10 +296,11 @@ fun MainScreen(navController: NavController, context:Context) {
                         }
                     }
                     FlowRow(mainAxisAlignment = MainAxisAlignment.SpaceBetween,mainAxisSpacing = 8.dp,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                        mainAxisSize = SizeMode.Expand
                         ) {
                         OutlinedButton(onClick = {
-                            navController.navigate("CodeScreen")
+                            context.startActivity(Intent(context, CodeActivity::class.java))
                         }
                         ) {
                             Image(painter = painterResource(id = R.drawable.c), contentDescription = null,Modifier.size(50.dp))
@@ -308,7 +316,19 @@ fun MainScreen(navController: NavController, context:Context) {
                             Text(text = "python编辑器")
                         }
                     }
-
+                    FlowRow(mainAxisAlignment = MainAxisAlignment.SpaceBetween,mainAxisSpacing = 8.dp,
+                        modifier = Modifier.fillMaxWidth(),
+                        mainAxisSize = SizeMode.Expand
+                    ) {
+                        OutlinedButton(onClick = {
+                            navController.navigate("WebScreen/lan")
+                        }
+                        ) {
+                            Icon(imageVector = Icons.TwoTone.WebStories, contentDescription = null)
+                            Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
+                            Text(text = "我的小窝")
+                        }
+                    }
                 }
         }
     }

@@ -4,8 +4,12 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.webkit.CookieManager
+import android.webkit.CookieSyncManager
 import android.webkit.GeolocationPermissions
 import android.webkit.ValueCallback
+import android.webkit.WebResourceRequest
+import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,6 +18,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.twotone.ArrowBack
+import androidx.compose.material.icons.twotone.Home
+import androidx.compose.material.icons.twotone.KeyboardArrowLeft
+import androidx.compose.material.icons.twotone.KeyboardArrowRight
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -33,21 +40,25 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.navigation.NavController
 import com.example.jing.ui.theme.Pink40
 import com.google.accompanist.web.AccompanistWebChromeClient
+import com.google.accompanist.web.AccompanistWebViewClient
 import com.google.accompanist.web.LoadingState
 import com.google.accompanist.web.WebView
 import com.google.accompanist.web.WebViewNavigator
 import com.google.accompanist.web.rememberWebViewState
 
+
 @SuppressLint("SetJavaScriptEnabled", "SuspiciousIndentation")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun WebScreen(navController: NavController
-              ,flag:String
-              ,context:Context,
-              webViewNavigator: WebViewNavigator,
-              rememberUri:MutableState<String>,
+fun WebScreen(
+    navController: NavController,
+    flag: String,
+    context: Context,
+    webViewNavigator: WebViewNavigator,
+    rememberUri: MutableState<String>,
 ){
     Translatebar()
+    val LAN=flag
     val AS="https://developer.android.google.cn/studio"
     val compose="https://developer.android.google.cn/jetpack/compose"
     val help="https://support.qq.com/product/441318"
@@ -64,6 +75,7 @@ fun WebScreen(navController: NavController
     val mdui="https://www.mdui.org/"
     val oiwiki="https://oi-wiki.org/"
     val ctfwiki="https://ctf-wiki.org/"
+    val lan="https://LanHuang025.github.io"
     val url by remember {
         mutableStateOf(
             if (flag=="as") AS else
@@ -77,12 +89,53 @@ fun WebScreen(navController: NavController
         else if (flag=="mdui") mdui
         else if (flag=="oiwiki") oiwiki
         else if (flag=="ctfwiki") ctfwiki
+        else if (flag=="lan") lan
         else ""
         )
     }
     val state = rememberWebViewState(url = url)
     rememberUri.value=state.content.getCurrentUrl()!!
     val loadingState = state.loadingState
+    val webchromeClient = remember {
+        object : AccompanistWebChromeClient() {
+            override fun onShowFileChooser(
+                webView: WebView?,
+                filePathCallback: ValueCallback<Array<Uri>>?,
+                fileChooserParams: FileChooserParams?
+            ): Boolean {
+                val i=Intent(Intent.ACTION_GET_CONTENT)
+                i.addCategory(Intent.CATEGORY_OPENABLE)
+                i.type="image/*"
+                val chooseIntent=Intent.createChooser(i,"请选择你的图片")
+                context.startActivity(chooseIntent)
+                return false
+            }
+
+            override fun onGeolocationPermissionsShowPrompt(
+                origin: String?,
+                callback: GeolocationPermissions.Callback?
+            ) {
+                callback!!.invoke(origin,true,false)
+                super.onGeolocationPermissionsShowPrompt(origin, callback)
+            }
+        }
+    }
+    val webclient= remember {
+        object : AccompanistWebViewClient() {
+            override fun shouldInterceptRequest(
+                view: WebView?,
+                request: WebResourceRequest?
+            ): WebResourceResponse? {
+                return if (url.startsWith("http") || url.startsWith("https")) { //http和https协议开头的执行正常的流程
+                    super.shouldInterceptRequest(view, url)
+                } else {  //其他的URL则会开启一个Acitity然后去调用原生APP
+                    val goto = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                    context.startActivity(goto)
+                    return null
+                }
+            }
+        }
+    }
     Scaffold(
         topBar = {
             TopAppBar(title = {
@@ -98,14 +151,32 @@ fun WebScreen(navController: NavController
                 else if (url==mdui) "mdui文档"
                 else if (url==oiwiki) "OI Wiki"
                 else if (url==ctfwiki) "CTF Wiki"
+                    else if (url==lan) "我的小窝"
                     else url, overflow = TextOverflow.Ellipsis
                 )
             },
                 navigationIcon = {
                     IconButton(onClick = {
-                        navController.navigateUp()
+                        navController.navigate("MainScreen")
                     }) {
                         Icon(imageVector = Icons.TwoTone.ArrowBack, contentDescription = null)
+                    }
+                },
+                actions = {
+                        IconButton(onClick = {
+                            navController.navigate("WebScreen/$flag")
+                        }) {
+                            Icon(imageVector = Icons.TwoTone.Home, contentDescription = null)
+                        }
+                    IconButton(onClick = {
+                        webViewNavigator.navigateBack()
+                    }) {
+                        Icon(imageVector = Icons.TwoTone.KeyboardArrowLeft, contentDescription = null)
+                    }
+                    IconButton(onClick = {
+                        webViewNavigator.navigateForward()
+                    }) {
+                        Icon(imageVector = Icons.TwoTone.KeyboardArrowRight, contentDescription = null)
                     }
                 }
             )
@@ -126,30 +197,6 @@ fun WebScreen(navController: NavController
                         trackColor = Pink40
                     )
                 }
-                val webClient = remember {
-                    object : AccompanistWebChromeClient() {
-                        override fun onShowFileChooser(
-                            webView: WebView?,
-                            filePathCallback: ValueCallback<Array<Uri>>?,
-                            fileChooserParams: FileChooserParams?
-                        ): Boolean {
-                            val i=Intent(Intent.ACTION_GET_CONTENT)
-                            i.addCategory(Intent.CATEGORY_OPENABLE)
-                            i.type="image/*"
-                            val chooseIntent=Intent.createChooser(i,"请选择你的图片")
-                            context.startActivity(chooseIntent)
-                            return false
-                        }
-
-                        override fun onGeolocationPermissionsShowPrompt(
-                            origin: String?,
-                            callback: GeolocationPermissions.Callback?
-                        ) {
-                                callback!!.invoke(origin,true,false)
-                            super.onGeolocationPermissionsShowPrompt(origin, callback)
-                        }
-                    }
-                }
                 WebView(
                     captureBackPresses = true,
                     state = state,
@@ -166,12 +213,15 @@ fun WebScreen(navController: NavController
                                 builtInZoomControls=true
                                 setSupportZoom(true)
                                 useWideViewPort=true
+                                allowContentAccess=true
+                                allowFileAccess=true
+                                allowFileAccessFromFileURLs=true
                             }
                         }
-
                     },
                     modifier = Modifier.weight(1f)
-                , chromeClient = webClient,
+                , chromeClient = webchromeClient,
+                    client=webclient,
                     navigator = webViewNavigator
                 )
             }
@@ -179,4 +229,7 @@ fun WebScreen(navController: NavController
             CircularProgressIndicator()
         }
     }
+    CookieSyncManager.createInstance(context);
+    CookieSyncManager.getInstance().startSync();
+    CookieManager.getInstance();
 }

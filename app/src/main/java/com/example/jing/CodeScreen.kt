@@ -17,8 +17,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
+import io.github.rosemoe.sora.langs.textmate.TextMateLanguage
+import io.github.rosemoe.sora.langs.textmate.registry.FileProviderRegistry
+import io.github.rosemoe.sora.langs.textmate.registry.GrammarRegistry
+import io.github.rosemoe.sora.langs.textmate.registry.ThemeRegistry
+import io.github.rosemoe.sora.langs.textmate.registry.dsl.languages
+import io.github.rosemoe.sora.langs.textmate.registry.model.ThemeModel
+import io.github.rosemoe.sora.langs.textmate.registry.provider.AssetsFileResolver
 import io.github.rosemoe.sora.widget.CodeEditor
 import io.github.rosemoe.sora.widget.SymbolInputView
+import org.eclipse.tm4e.core.registry.IThemeSource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -66,10 +74,61 @@ fun CodeScreen(navController: NavController,context: Context){
                     inputView.forEachButton {
                         it.typeface = typeface
                     }
+                    inputView.bindEditor(editor)
+                    val language = TextMateLanguage.create(
+                        "source.java", true
+                    )
+                    editor.setEditorLanguage(language)
                 }
             },
             update = {
             }
         )
     }
+}
+private /*suspend*/ fun loadDefaultThemes(context: Context) /*= withContext(Dispatchers.IO)*/ {
+
+    //add assets file provider
+    FileProviderRegistry.getInstance().addFileProvider(
+        AssetsFileResolver(
+            context.assets
+        )
+    )
+
+
+    val themes = arrayOf("darcula", "abyss", "quietlight", "solarized_drak")
+    val themeRegistry = ThemeRegistry.getInstance()
+    themes.forEach { name ->
+        val path = "textmate/$name.json"
+        themeRegistry.loadTheme(
+            ThemeModel(
+                IThemeSource.fromInputStream(
+                    FileProviderRegistry.getInstance().tryGetInputStream(path), path, null
+                ), name
+            )
+        )
+    }
+
+    themeRegistry.setTheme("quietlight")
+}
+private fun loadDefaultLanguagesWithDSL() {
+    GrammarRegistry.getInstance().loadGrammars(
+        languages {
+            language("java") {
+                grammar = "textmate/java/syntaxes/java.tmLanguage.json"
+                defaultScopeName()
+                languageConfiguration = "textmate/java/language-configuration.json"
+            }
+            language("kotlin") {
+                grammar = "textmate/kotlin/syntaxes/Kotlin.tmLanguage"
+                defaultScopeName()
+                languageConfiguration = "textmate/kotlin/language-configuration.json"
+            }
+            language("python") {
+                grammar = "textmate/python/syntaxes/python.tmLanguage.json"
+                defaultScopeName()
+                languageConfiguration = "textmate/python/language-configuration.json"
+            }
+        }
+    )
 }
