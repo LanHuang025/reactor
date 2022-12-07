@@ -17,6 +17,7 @@ import com.example.jing.utils.CrashHandler
 class MainActivity : ComponentActivity() {
     var context=this
     override fun onCreate(savedInstanceState: Bundle?) {
+        CrashHandler.INSTANCE.init(this)
         WindowCompat.setDecorFitsSystemWindows(window,false)
         super.onCreate(savedInstanceState)
         //System.loadLibrary("ts")

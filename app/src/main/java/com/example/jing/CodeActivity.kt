@@ -1,6 +1,6 @@
 package com.example.jing
 
-import android.app.AlertDialog
+import  android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Typeface
@@ -19,7 +19,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.jing.databinding.ActivityMainBinding
 import com.example.jing.editor.LspTestActivity
 import com.example.jing.editor.TestActivity
-import com.example.jing.utils.CrashHandler
 import io.github.rosemoe.sora.event.ContentChangeEvent
 import io.github.rosemoe.sora.event.EditorKeyEvent
 import io.github.rosemoe.sora.event.KeyBindingEvent
@@ -67,10 +66,8 @@ class CodeActivity : AppCompatActivity() {
     private var undo: MenuItem? = null
     private var redo: MenuItem? = null
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        CrashHandler.INSTANCE.init(this)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val inputView = binding.symbolInput
@@ -155,14 +152,48 @@ class CodeActivity : AppCompatActivity() {
         val language = TextMateLanguage.create(
             "source.java", true
         )
-
         editor.setEditorLanguage(language)
-
-        openAssetsFile("sample.txt")
+        if(intent.extras?.getInt("flag") ==1){
+            var fis: FileInputStream? = null
+            try {
+                fis = openFileInput("crash-journal.log")
+                val br = BufferedReader(InputStreamReader(fis))
+                val sb = StringBuilder()
+                var line: String?
+                while (br.readLine().also { line = it } != null) {
+                    sb.append(line).append('\n')
+                }
+                Toast.makeText(this, "程序出现错误", Toast.LENGTH_SHORT).show()
+                editor.setText(sb, null)
+            } catch (e: Exception) {
+                Toast.makeText(this, "Failed:$e", Toast.LENGTH_SHORT).show()
+                e.printStackTrace()
+            } finally {
+                if (fis != null) {
+                    try {
+                        fis.close()
+                    } catch (e: IOException) {
+                        e.printStackTrace()
+                    }
+                }
+            }
+        }else{
+            openAssetsFile("sample.txt")
+        }
         updatePositionText()
         updateBtnState()
     }
 
+    @Deprecated("Deprecated in Java")
+    override fun onBackPressed() {
+        if (intent.extras?.getInt("flag")==1){
+            startActivity(Intent(this,MainActivity::class.java))
+            finish()
+        }
+        else{
+            super.onBackPressed()
+        }
+    }
 
     private /*suspend*/ fun loadDefaultThemes() /*= withContext(Dispatchers.IO)*/ {
 
@@ -779,7 +810,7 @@ class CodeActivity : AppCompatActivity() {
                     while (br.readLine().also { line = it } != null) {
                         sb.append(line).append('\n')
                     }
-                    Toast.makeText(this, "Succeeded", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "程序发生错误", Toast.LENGTH_SHORT).show()
                     editor.setText(sb, null)
                 } catch (e: Exception) {
                     Toast.makeText(this, "Failed:$e", Toast.LENGTH_SHORT).show()
