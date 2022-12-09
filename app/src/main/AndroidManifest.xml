@@ -64,5 +64,8 @@
                 <action android:name="android.intent.action.ACTION_VIEW" />
             </intent-filter>
         </activity>
+        <meta-data
+            android:name="com.huawei.agconnect.AccessNetwork"
+            android:value="true" />
     </application>
 </manifest>

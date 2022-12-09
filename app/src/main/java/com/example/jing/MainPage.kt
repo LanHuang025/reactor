@@ -47,7 +47,7 @@ fun MainPage(context: Context,clipboardManager: ClipboardManager) {
         mutableStateOf("true")
     }
     val url="https://gitee.com/HuangLan2019/my-world/raw/master/README.md"
-    val client = OkHttpClient();
+    val client = OkHttpClient()
     val request = Request.Builder()
         .url(url)
         .build();

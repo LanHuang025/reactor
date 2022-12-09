@@ -4,6 +4,7 @@ pluginManagement {
         mavenCentral()
         gradlePluginPortal()
         maven { url "https://s01.oss.sonatype.org/content/groups/public" }
+        maven {url "https://developer.huawei.com/repo/"}
     }
 }
 dependencyResolutionManagement {
@@ -13,8 +14,9 @@ dependencyResolutionManagement {
         mavenCentral()
         maven{ url "https://repo.eclipse.org/content/groups/releases/"}
         maven{ url "https://maven.aliyun.com/nexus/content/groups/public/"}
-        maven { url 'https://jitpack.io' }
+        maven { url "https://jitpack.io" }
+        maven { url "https://developer.huawei.com/repo/" }
     }
 }
-rootProject.name = "进制转换工具"
+rootProject.name = "反应堆"
 include ':app'

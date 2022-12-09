@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.twotone.AddChart
+import androidx.compose.material.icons.twotone.Android
 import androidx.compose.material.icons.twotone.CalendarToday
 import androidx.compose.material.icons.twotone.Call
 import androidx.compose.material.icons.twotone.Co2
@@ -27,8 +28,10 @@ import androidx.compose.material.icons.twotone.Help
 import androidx.compose.material.icons.twotone.Home
 import androidx.compose.material.icons.twotone.Info
 import androidx.compose.material.icons.twotone.Menu
+import androidx.compose.material.icons.twotone.MinorCrash
 import androidx.compose.material.icons.twotone.OilBarrel
 import androidx.compose.material.icons.twotone.Transform
+import androidx.compose.material.icons.twotone.Translate
 import androidx.compose.material.icons.twotone.WebStories
 import androidx.compose.material.icons.twotone.Wifi
 import androidx.compose.material3.ButtonDefaults
@@ -59,6 +62,7 @@ import com.google.accompanist.flowlayout.FlowColumn
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.MainAxisAlignment
 import com.google.accompanist.flowlayout.SizeMode
+import com.huawei.agconnect.crash.AGConnectCrash
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -327,6 +331,30 @@ fun MainScreen(navController: NavController, context:Context) {
                             Icon(imageVector = Icons.TwoTone.WebStories, contentDescription = null)
                             Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
                             Text(text = "我的小窝")
+                        }
+                        OutlinedButton(onClick = {
+                            AGConnectCrash.getInstance().testIt(context)
+                        }
+                        ) {
+                            Icon(imageVector = Icons.TwoTone.MinorCrash, contentDescription = null)
+                            Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
+                            Text(text = "测试崩溃")
+                        }
+                        OutlinedButton(onClick = {
+                            navController.navigate("WebScreen/aibot")
+                        }
+                        ) {
+                            Icon(imageVector = Icons.TwoTone.Android, contentDescription = null)
+                            Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
+                            Text(text = "AI机器人")
+                        }
+                        OutlinedButton(onClick = {
+                            navController.navigate("WebScreen/translate")
+                        }
+                        ) {
+                            Icon(imageVector = Icons.TwoTone.Translate, contentDescription = null)
+                            Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
+                            Text(text = "Google翻译")
                         }
                     }
                 }

@@ -8,6 +8,7 @@ import android.net.Uri
 import android.webkit.CookieManager
 import android.webkit.CookieSyncManager
 import android.webkit.GeolocationPermissions
+import android.webkit.JsResult
 import android.webkit.ValueCallback
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
@@ -22,6 +23,7 @@ import androidx.compose.material.icons.twotone.ArrowBack
 import androidx.compose.material.icons.twotone.Home
 import androidx.compose.material.icons.twotone.KeyboardArrowLeft
 import androidx.compose.material.icons.twotone.KeyboardArrowRight
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -29,12 +31,14 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
@@ -77,6 +81,8 @@ fun WebScreen(
     val oiwiki="https://oi-wiki.org/"
     val ctfwiki="https://ctf-wiki.org/"
     val lan="https://LanHuang025.github.io"
+    val translate="https://translate.amz.wang/"
+    val aibot="https://gpt.chatapi.art/"
     val url by remember {
         mutableStateOf(
             if (flag=="as") AS else
@@ -91,10 +97,65 @@ fun WebScreen(
         else if (flag=="oiwiki") oiwiki
         else if (flag=="ctfwiki") ctfwiki
         else if (flag=="lan") lan
+        else if (flag=="translate") translate
+        else if (flag=="aibot") aibot
         else ""
         )
     }
-    val webView:WebView
+    var isShowA by remember {
+        mutableStateOf(false)
+    }
+    var isShowB by remember {
+        mutableStateOf(false)
+    }
+    var messageX by remember {
+        mutableStateOf("")
+    }
+    val result:JsResult?=null
+    var resultX by remember {
+        mutableStateOf(result)
+    }
+    if (isShowA){
+        AlertDialog(onDismissRequest = { },
+        title = {
+                Text(text ="反应堆")
+        },
+            text ={
+                Text(text = messageX)
+            },
+            confirmButton = {
+                TextButton(onClick = { isShowA=false
+                    resultX?.confirm()
+                }) {
+                    Text(text = "确定")
+                }
+            }
+        )
+    }
+    if (isShowB){
+        AlertDialog(onDismissRequest = { },
+            title = {
+                Text(text ="反应堆")
+            },
+            text ={
+                Text(text = messageX)
+            },
+            confirmButton = {
+                TextButton(onClick = { isShowB=false
+                    resultX?.confirm()
+                }) {
+                    Text(text = "确定")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { isShowB=false
+                    resultX?.cancel()
+                }) {
+                    Text(text = "取消")
+                }
+            }
+        )
+    }
     val state = rememberWebViewState(url = url)
     rememberUri.value=state.content.getCurrentUrl()!!
     val loadingState = state.loadingState
@@ -119,6 +180,30 @@ fun WebScreen(
             ) {
                 callback!!.invoke(origin,true,false)
                 super.onGeolocationPermissionsShowPrompt(origin, callback)
+            }
+
+            override fun onJsAlert(
+                view: WebView?,
+                url: String?,
+                message: String?,
+                result: JsResult?
+            ): Boolean {
+                messageX=message!!
+                resultX=result
+                isShowA=true
+                return true
+            }
+
+            override fun onJsConfirm(
+                view: WebView?,
+                url: String?,
+                message: String?,
+                result: JsResult?
+            ): Boolean {
+                messageX=message!!
+                resultX=result
+                isShowB=true
+                return true
             }
         }
     }
@@ -145,6 +230,7 @@ fun WebScreen(
                 view?.loadUrl("javascript:\$('#username').val('202201014028');")
                 view?.loadUrl("javascript:\$('#password_text').val('20031002aA1~');")
                 view?.loadUrl("javascript:\$('#rememberMe').prop(\"checked\",true);")
+                //view?.loadUrl("javascript:alert(\"${url}\");")
                 /*if (url=="http://dekt.jxutcm.edu.cn/loginController.do?mlogin"){
                     view?.loadUrl("javascript:document.getElementById(\"app\").getElementsByTagName(\"input\")[0].value=\"202201014028\";")
                  view?.loadUrl("javascript:document.getElementById(\"app\").getElementsByTagName(\"input\")[1].value=\"zyy@#021734\";")
@@ -169,6 +255,8 @@ fun WebScreen(
                 else if (url==oiwiki) "OI Wiki"
                 else if (url==ctfwiki) "CTF Wiki"
                     else if (url==lan) "我的小窝"
+                    else if(url=="translate") "谷歌翻译"
+                    else if(url==aibot) "AI机器人"
                     else url, overflow = TextOverflow.Ellipsis
                 )
             },
@@ -233,6 +321,9 @@ fun WebScreen(
                                 allowContentAccess=true
                                 allowFileAccess=true
                                 allowFileAccessFromFileURLs=true
+                                saveFormData=true
+                                savePassword("http://dekt.jxutcm.edu.cn/loginController.do?mlogin",
+                                    "202201014028","zyy@#021734")
                             }
                         }
                     },
