@@ -3,6 +3,7 @@ package com.example.jing
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
 import android.webkit.CookieManager
 import android.webkit.CookieSyncManager
@@ -93,6 +94,7 @@ fun WebScreen(
         else ""
         )
     }
+    val webView:WebView
     val state = rememberWebViewState(url = url)
     rememberUri.value=state.content.getCurrentUrl()!!
     val loadingState = state.loadingState
@@ -133,6 +135,21 @@ fun WebScreen(
                     context.startActivity(goto)
                     return null
                 }
+            }
+
+            override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+                super.onPageStarted(view, url, favicon)
+            }
+            override fun onPageFinished(view: WebView?, url: String?) {
+                super.onPageFinished(view, url)
+                view?.loadUrl("javascript:\$('#username').val('202201014028');")
+                view?.loadUrl("javascript:\$('#password_text').val('20031002aA1~');")
+                view?.loadUrl("javascript:\$('#rememberMe').prop(\"checked\",true);")
+                /*if (url=="http://dekt.jxutcm.edu.cn/loginController.do?mlogin"){
+                    view?.loadUrl("javascript:document.getElementById(\"app\").getElementsByTagName(\"input\")[0].value=\"202201014028\";")
+                 view?.loadUrl("javascript:document.getElementById(\"app\").getElementsByTagName(\"input\")[1].value=\"zyy@#021734\";")
+                }
+                view?.loadUrl("javascript:alert(\"${url}\");")*/
             }
         }
     }

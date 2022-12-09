@@ -115,7 +115,7 @@ fun MainPage(context: Context,clipboardManager: ClipboardManager) {
             CodeScreen(navController,context)
         }
         composable("BinaryScreen") {
-            BinaryScreen(navController)
+            BinaryScreen(navController,clipboardManager,context)
         }
         composable("WifiScreen"){
             WifiScreen(navController = navController, clipboardManager = clipboardManager)

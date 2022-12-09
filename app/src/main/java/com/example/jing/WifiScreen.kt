@@ -44,8 +44,8 @@ fun WifiScreen(navController: NavController, clipboardManager: ClipboardManager)
     val viewModel: MyViewModel = viewModel()
     val isRefreshing by viewModel.isRefreshing.collectAsState()
     val Path = "/data/misc/wifi/WifiConfigStore.xml"
-    var result = Shell.cmd("cat $Path > /sdcard/wifitest.xml").exec()
-    var list = XmlPaser().maplist(pathname = "/sdcard/wifitest.xml")
+    val result = Shell.cmd("cat $Path > /sdcard/wifitest.xml").exec()
+    val list = XmlPaser().maplist(pathname = "/sdcard/wifitest.xml")
     val dialog = remember {
         mutableStateOf(false)
     }

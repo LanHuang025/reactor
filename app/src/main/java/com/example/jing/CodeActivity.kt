@@ -154,6 +154,7 @@ class CodeActivity : AppCompatActivity() {
         )
         editor.setEditorLanguage(language)
         if(intent.extras?.getInt("flag") ==1){
+            title = "崩溃日志"
             var fis: FileInputStream? = null
             try {
                 fis = openFileInput("crash-journal.log")
@@ -182,6 +183,10 @@ class CodeActivity : AppCompatActivity() {
         }
         updatePositionText()
         updateBtnState()
+        supportActionBar?.apply {
+            setDisplayShowHomeEnabled(true)
+            setDisplayHomeAsUpEnabled(true)
+        }
     }
 
     @Deprecated("Deprecated in Java")
@@ -466,7 +471,13 @@ class CodeActivity : AppCompatActivity() {
                     startActivity(Intent(this, LspTestActivity::class.java))
                 }
             }
-
+            android.R.id.home->if (intent.extras?.getInt("flag")==1){
+                startActivity(Intent(this,MainActivity::class.java))
+                finish()
+            }
+            else{
+                finish()
+            }
             R.id.text_undo -> editor.undo()
             R.id.text_redo -> editor.redo()
             R.id.goto_end -> editor.setSelection(

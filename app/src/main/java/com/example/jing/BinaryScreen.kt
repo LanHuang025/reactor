@@ -1,6 +1,11 @@
 package com.example.jing
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -9,6 +14,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.twotone.ArrowBack
 import androidx.compose.material.icons.twotone.Clear
+import androidx.compose.material.icons.twotone.ContentCopy
 import androidx.compose.material.icons.twotone.Warning
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -35,7 +41,7 @@ import java.math.BigInteger
 
 @Composable
 @ExperimentalMaterial3Api
-fun BinaryScreen(navController: NavController) {
+fun BinaryScreen(navController: NavController,clipboardManager: ClipboardManager,context:Context) {
     Translatebar()
     Scaffold(Modifier.fillMaxSize(),
         topBar = {
@@ -110,8 +116,19 @@ fun BinaryScreen(navController: NavController) {
                         onValueChange = { text3 = it },
                         label = { Text("十进制") },
                         trailingIcon = {
-                            IconButton(onClick = { text3 = "" }) {
-                                Icon(imageVector = Icons.TwoTone.Clear, contentDescription = null)
+                            Row {
+                                IconButton(onClick = {
+                                    val clip = ClipData.newPlainText("数字", data)
+                                    clipboardManager.setPrimaryClip(clip)
+                                    Toast
+                                        .makeText(context, "已复制到剪贴板", Toast.LENGTH_SHORT)
+                                        .show()
+                                }) {
+                                    Icon(imageVector = Icons.TwoTone.ContentCopy, contentDescription = null)
+                                }
+                                IconButton(onClick = { text3 = "" }) {
+                                    Icon(imageVector = Icons.TwoTone.Clear, contentDescription = null)
+                                }
                             }
                         },
                     )
@@ -144,21 +161,33 @@ fun BinaryScreen(navController: NavController) {
                                 if (it[0]-'0' !in 0..1){
                                     text1=""
                                     warn=true
-                                }else {
-                                    text1=it
-                                }
+                                }else if (it[it.length-1]-'0' !in 0..1){
+                                    text1=it.substring(0,it.length-1)
+                                    warn=true
+                                }else text1=it
                             }
                         },
                         label = { Text("二进制") },
                         trailingIcon = {
-                            IconButton(onClick = { text1 = "" }) {
-                                Icon(imageVector = Icons.TwoTone.Clear, contentDescription = null)
+                            Row {
+                                IconButton(onClick = {
+                                    val clip = ClipData.newPlainText("数字", data)
+                                    clipboardManager.setPrimaryClip(clip)
+                                    Toast
+                                        .makeText(context, "已复制到剪贴板", Toast.LENGTH_SHORT)
+                                        .show()
+                                }) {
+                                    Icon(imageVector = Icons.TwoTone.ContentCopy, contentDescription = null)
+                                }
+                                IconButton(onClick = { text1 = "" }) {
+                                    Icon(imageVector = Icons.TwoTone.Clear, contentDescription = null)
+                                }
                             }
                         }
                     )
 
                 }
-                /*OutlinedCard(Modifier.padding(16.dp)) {
+                OutlinedCard(Modifier.padding(16.dp)) {
                     var data = ""
                     if (flag == 0) {
                         data = text2
@@ -182,23 +211,31 @@ fun BinaryScreen(navController: NavController) {
                         },
                         value = data,
                         onValueChange = {
-                            if (flag==2){
-                                if (it[it.length - 1] - '0' in 1..2)
-                                    text2 = it else if (it.length==1) {
-                                    text2 = ""
+                            if (flag==2&&it.isNotEmpty()){
+                                if (it[0]-'0' !in 0..7){
+                                    text2=""
                                     warn=true
-                                } else {
-                                    //it.removeRange(it.length - 1, it.length)
+                                }else if (it[it.length-1]-'0' !in 0..7){
+                                    text2=it.substring(0,it.length-1)
                                     warn=true
-                                }
-                            }else {
-                                text2=it
+                                }else text2=it
                             }
                         },
                         label = { Text("八进制") },
                         trailingIcon = {
-                            IconButton(onClick = { text2 = "" }) {
-                                Icon(imageVector = Icons.TwoTone.Clear, contentDescription = null)
+                            Row {
+                                IconButton(onClick = {
+                                    val clip = ClipData.newPlainText("数字", data)
+                                    clipboardManager.setPrimaryClip(clip)
+                                    Toast
+                                        .makeText(context, "已复制到剪贴板", Toast.LENGTH_SHORT)
+                                        .show()
+                                }) {
+                                    Icon(imageVector = Icons.TwoTone.ContentCopy, contentDescription = null)
+                                }
+                                IconButton(onClick = { text2 = "" }) {
+                                    Icon(imageVector = Icons.TwoTone.Clear, contentDescription = null)
+                                }
                             }
                         }
                     )
@@ -228,28 +265,36 @@ fun BinaryScreen(navController: NavController) {
                         },
                         value = data,
                         onValueChange = {
-                            if (flag==4){
-                                if (it[it.length - 1] - '0' in 1..2)
-                                    text4 = it else if (it.length==1) {
-                                    text4 = ""
+                            if (flag==4&&it.isNotEmpty()){
+                                if (it[0]-'0' !in 0..9&&it[0] !in 'a'..'e'){
+                                    text4=""
                                     warn=true
-                                } else {
-                                    //it.removeRange(it.length - 1, it.length)
+                                }else if (it[it.length-1]-'0' !in 0..9&&it[it.length-1] !in 'a'..'e'){
+                                    text4=it.substring(0,it.length-1)
                                     warn=true
-                                }
-                            }else {
-                                text4=it
+                                }else text4=it
                             }
                         },
                         label = { Text("十六进制") },
                         trailingIcon = {
-                            IconButton(onClick = { text4 = "" }) {
-                                Icon(imageVector = Icons.TwoTone.Clear, contentDescription = null)
+                            Row {
+                                IconButton(onClick = {
+                                    val clip = ClipData.newPlainText("数字", data)
+                                    clipboardManager.setPrimaryClip(clip)
+                                    Toast
+                                        .makeText(context, "已复制到剪贴板", Toast.LENGTH_SHORT)
+                                        .show()
+                                }) {
+                                    Icon(imageVector = Icons.TwoTone.ContentCopy, contentDescription = null)
+                                }
+                                IconButton(onClick = { text4 = "" }) {
+                                    Icon(imageVector = Icons.TwoTone.Clear, contentDescription = null)
+                                }
                             }
                         }
                     )
 
-                }*/
+                }
             }
         }
     }
