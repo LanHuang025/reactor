@@ -108,7 +108,7 @@ class LspTestActivity : AppCompatActivity() {
 
 
         startService(
-            Intent(this@LspTestActivity, com.example.jing.LspLanguageServerService::class.java)
+            Intent(this@LspTestActivity, com.example.jing.services.LspLanguageServerService::class.java)
                 .apply {
                     putExtra("port", port)
                 }

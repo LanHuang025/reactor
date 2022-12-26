@@ -11,7 +11,7 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import com.example.jing.CodeActivity
+import com.example.jing.activity.CodeActivity
 import java.io.FileOutputStream
 import java.io.PrintWriter
 import java.io.StringWriter

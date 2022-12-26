@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'com.huawei.agconnect'
+    id 'kotlin-kapt'
 }
 def buildTime() {
     def date = new Date()
@@ -25,7 +26,9 @@ android {
             useSupportLibrary true
         }
     }
-
+    kapt {
+        correctErrorTypes = true
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -66,13 +69,43 @@ android {
 }
 
 dependencies {
-    implementation 'com.huawei.agconnect:agconnect-credential:1.7.3.302'
-    implementation 'com.huawei.hms:hianalytics:1.7.3.302'
-    implementation 'com.huawei.agconnect:agconnect-appmessaging:1.7.3.302'
-    implementation 'com.huawei.agconnect:agconnect-remoteconfig-ktx:1.7.3.302'
-    implementation 'com.huawei.agconnect:agconnect-crash:1.7.3.302'
-    implementation 'com.huawei.agconnect:agconnect-core:1.7.3.302'
-    api("io.github.itsaky:android-tree-sitter:1.0.3")
+    implementation 'com.google.code.gson:gson:2.10'
+    // 引入基础SDK
+    implementation 'com.huawei.hms:ml-computer-vision-segmentation:3.7.0.302'
+    // 引入多类别分割模型包
+    implementation 'com.huawei.hms:ml-computer-vision-image-segmentation-multiclass-model:3.7.0.302'
+    // 引入人像分割模型包
+    implementation 'com.huawei.hms:ml-computer-vision-image-segmentation-body-model:3.7.0.302'
+    //引入头发分割模型包
+    implementation 'com.huawei.hms:ml-computer-vision-image-segmentation-hair-model:3.7.0.302'
+    // 引入身份证plugin与识别能力集合包。
+    //implementation 'com.huawei.hms:ml-computer-card-icr-cn:3.7.0.303'
+    implementation "com.huawei.agconnect:agconnect-credential:$huawei_version"
+    implementation "com.huawei.hms:hianalytics:6.7.0.300"
+    implementation "com.huawei.agconnect:agconnect-auth:$huawei_version"
+    implementation "com.huawei.agconnect:agconnect-appmessaging:$huawei_version"
+    implementation "com.huawei.agconnect:agconnect-remoteconfig-ktx:$huawei_version"
+    implementation "com.huawei.agconnect:agconnect-crash:$huawei_version"
+    implementation "com.huawei.agconnect:agconnect-core:$huawei_version"
+    def appsearch_version = '1.1.0-alpha02'
+
+    // AppSearch dependencies
+    implementation "androidx.appsearch:appsearch:$appsearch_version"
+    implementation "androidx.appsearch:appsearch-local-storage:$appsearch_version"
+    implementation "androidx.appsearch:appsearch-platform-storage:$appsearch_version"
+    kapt "androidx.appsearch:appsearch-compiler:$appsearch_version"
+
+    implementation 'androidx.activity:activity-ktx:1.7.0-alpha02'
+    implementation 'androidx.appcompat:appcompat:1.5.1'
+    implementation 'androidx.concurrent:concurrent-futures-ktx:1.1.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.core:core-ktx:1.9.0'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.6.0-alpha03'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.0-alpha03'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.0-alpha03'
+    implementation 'androidx.multidex:multidex:2.0.1'
+    implementation 'com.google.android.material:material:1.8.0-beta01'
+    api('io.github.itsaky:android-tree-sitter:1.0.9')
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.appcompat:appcompat:1.5.1")
     implementation('androidx.lifecycle:lifecycle-runtime-ktx:2.6.0-alpha03')
@@ -89,7 +122,7 @@ dependencies {
     implementation 'com.google.accompanist:accompanist-placeholder-material:0.28.0'
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
     implementation("org.eclipse.lemminx:org.eclipse.lemminx:0.17.0")
-    implementation(platform("io.github.Rosemoe.sora-editor:bom:0.18.1"))
+    implementation(platform('io.github.Rosemoe.sora-editor:bom:0.20.1'))
     implementation('io.github.Rosemoe.sora-editor:editor')
     implementation('io.github.Rosemoe.sora-editor:editor-lsp')
     implementation('io.github.Rosemoe.sora-editor:language-java')
@@ -97,8 +130,8 @@ dependencies {
     implementation 'com.github.javakam:file.core:3.6.0@aar'      //核心库必选(Core library required)
     implementation 'com.github.javakam:file.selector:3.6.0@aar'  //文件选择器(File selector)
     implementation 'com.github.javakam:file.compressor:3.6.0@aar'//图片压缩, 修改自Luban(Image compression, based on Luban)
-    implementation 'androidx.compose.material:material-icons-extended:1.4.0-alpha02'
-    implementation 'com.google.android.material:material:1.8.0-alpha03'
+    implementation 'androidx.compose.material:material-icons-extended:1.4.0-alpha03'
+    implementation 'com.google.android.material:material:1.8.0-beta01'
     implementation 'com.airbnb.android:lottie-compose:5.2.0'
     def nav_version = "2.6.0-alpha02"
     implementation 'androidx.navigation:navigation-compose:2.6.0-alpha04'
