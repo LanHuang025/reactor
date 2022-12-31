@@ -1,8 +1,8 @@
-# Rebound App (Under Construction)
+# Reactor App (Under Construction)
 
 Feature Rich & Highly Customizable Workout Log App
 
-> Rebound app is currently under heavy development, many things may be
+> Reactor app is currently under heavy development, many things may be
 > changed or completely removed in future.
 > App will stay open source until first stable release, after that
 > further development will be closed sourced.
